@@ -1,0 +1,52 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+    paths:
+#        - app/Http/Controllers/Orders
+#        - app/Models/Orders
+#        - app/Http/Controllers/CartController.php
+#
+#        - app/Http/Controllers/WishController.php
+#        - app/Models/Wish.php
+
+#        - app/Http/Controllers/PopupController.php
+#        - app/Models/Popup.php
+        #- routes
+
+#        - app/Http/Controllers/Boards
+#        - app/Models/Boards
+        #- app/Http/Controllers/Configs/CodeController.php
+        #- app/Models/Configs/Code.php
+        
+        #- app/Http/Controllers/Configs/OrderCancelTypeController.php
+        #- app/Models/Configs/OrderCancelType.php
+
+        #- app/Http/Controllers/Linkages
+        #- app/Models/Linkages
+
+        #- packages/commerceon/linkage/sabangnet/src/App/Http
+        #- packages/commerceon/linkage/sabangnet/src
+
+        - packages/commerceon/pg/iamport/src
+
+#        - app/Helpers
+
+
+    # The level 8 is the highest level
+    level: 8
+
+#    ignoreErrors:
+#        - '#Unsafe usage of new static#'
+    bootstrapFiles:
+#        - _ide_helper.php
+#        - _ide_helper_models.php
+
+    excludePaths:
+        - app/Providers/NovaServiceProvider.php
+        - app/Nova/Resource.php
+        - app/Http/Middleware/Authenticate.php
+        - app/Nova/Actions/FlushUserSessionAction.php
+        - app/Nova/Actions/PermitIpAction.php
+
+    checkMissingIterableValueType: false

@@ -1,0 +1,135 @@
+# version: '3.6'
+# services:
+#   mysql:
+#     build: mysql
+#     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4=utf8mb4_unicode_ci --character-set-server=utf8mb4 --skip-character-set-client-handshake
+#     volumes:
+#       - ${DOCKER_VOLUME_ROOT}/mysql/data:/var/lib/mysql:cached
+#       - ${DOCKER_VOLUME_ROOT}/mysql/log:/docker-volumes/log:cached
+#     ports:
+#       - ${MYSQL_PORT}:3306
+#     restart: unless-stopped
+#     environment:
+#       MYSQL_DATABASE: ${DB_DATABASE}
+#       MYSQL_USER: mysql
+#       MYSQL_PASSWORD: ${DB_PASSWORD}
+#       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
+#       MYSQL_INITDB_SKIP_TZINFO: Asia/Seoul
+
+#   redis:
+#     image: "bitnami/redis:6.2"
+#     ports:
+#       - ${REDIS_OUTER_PORT}:6379
+#     healthcheck:
+#       test: [ "CMD", "redis-cli","ping" ]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 3
+#     environment:
+#       - REDIS_PASSWORD=${REDIS_PASSWORD}
+#       - ALLOW_EMPTY_PASSWORD=no
+
+#   php-apache:
+#     build: php-apache
+#     env_file:
+#       - .env
+#     ports:
+#       - ${APACHE_PORT}:80
+#     restart: unless-stopped
+#     volumes:
+#       - ${PROJECT_ROOT}/php-apache/php.ini-${__ENVIRONMENT__}:/usr/local/etc/php/php.ini
+#       - ${PROJECT_ROOT}:${__DOCKER_DOCUMENT_ROOT__}:cached
+#       - ${PROJECT_ROOT}/config:${__DOCKER_DOCUMENT_ROOT__}/admin_data/services/config
+#       - ${DOCKER_VOLUME_ROOT}/php-apache:/docker-volumes
+#     links:
+#       - mysql
+
+#   chat_server:
+#     build:
+#       context: .
+#       target: production
+#     volumes:
+#       - ./views:/usr/src/app/views
+#       - ./src/assets:/usr/src/app/dist/assets
+#       - ./config:/usr/src/app/config
+#       - ./.env:/usr/src/app/.env.production
+#     depends_on:
+#       - redis
+#       - mysql
+#     command: >
+#       sh -c "nest start --watch"
+#     env_file:
+#       - .env
+#     ports:
+#       - ${PORT}:${PORT}
+# volumes:
+#   admin_data:
+
+version: "3"
+
+services:
+  db:
+    image: mariadb:10
+    ports:
+      - 3309:3306
+    volumes:
+      - ./db/conf.d:/etc/mysql/conf.d
+      - ./db/data:/var/lib/mysql
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
+    env_file: .env
+    environment:
+      TZ: Asia/Seoul
+      MYSQL_HOST: localhost
+      MYSQL_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root!
+      MYSQL_DATABASE: students
+      MYSQL_USER: inti
+      MYSQL_PASSWORD: inti1234
+    restart: always
+
+  redis:
+    image: "bitnami/redis:6.2"
+    ports:
+      - ${REDIS_OUTER_PORT}:6379
+    healthcheck:
+      test: [ "CMD", "redis-cli","ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - ALLOW_EMPTY_PASSWORD=no
+# 
+  php-apache:
+    build: php-apache
+    env_file:
+      - .env
+    ports:
+      - ${APACHE_PORT}:80
+    restart: unless-stopped
+    volumes:
+      - ${PROJECT_ROOT}/php-apache/php.ini-${__ENVIRONMENT__}:/usr/local/etc/php/php.ini
+      - ${PROJECT_ROOT}:${__DOCKER_DOCUMENT_ROOT__}:cached
+      - ${PROJECT_ROOT}/config:${__DOCKER_DOCUMENT_ROOT__}/admin_data/services/config
+      - ${DOCKER_VOLUME_ROOT}/php-apache:/docker-volumes
+    links:
+      - db
+# 
+  chat_server:
+    build:
+      context: .
+      target: production
+    volumes:
+      - ./views:/usr/src/app/views
+      - ./src/assets:/usr/src/app/dist/assets
+      - ./config:/usr/src/app/config
+      - ./.env:/usr/src/app/.env.production
+    depends_on:
+      - redis
+      - db
+    command: >
+      sh -c "nest start --watch"
+    env_file:
+      - .env
+    ports:
+      - ${PORT}:${PORT}
