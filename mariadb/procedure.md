@@ -1,4 +1,5 @@
 ## procedure 생성
+```sql
 DELIMITER ;;
 CREATE PROCEDURE insert_test(IN count INT)
 BEGIN
@@ -10,10 +11,15 @@ BEGIN
     END WHILE;
 END;;
 DELIMITER ;
+```
 
 
 ## procedure 실행
+```sql
 CALL insert_test(100);
+```
 
 ## procedure 삭제
+```sql
 DROP PROCEDURE insert_test;
+```
