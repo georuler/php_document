@@ -99,7 +99,7 @@ class TelegramJob implements ShouldQueue
         $keyboard = [
             'inline_keyboard' => [
                 [
-                    ['text' => 'Link', 'url' => 'http://sungjindsp.iptime.org?returnUrl=/users/view/1']
+                    ['text' => 'Link', 'url' => '']
                 ]
             ]
         ];
