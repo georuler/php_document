@@ -117,5 +117,9 @@ $msg = [
 event(new TelegramEvent((object) $msg));
 ```
 
+- queue 실행
+```shell
+nohup php artisan queue:work --daemon >> storage/logs/laravel.log &
+```
 
 
