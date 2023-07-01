@@ -52,6 +52,15 @@ class TelegramEventListener
 }
 ```
 
+- EventServiceProvider 등록
+```php
+protected $listen = [
+    TelegramEvent::class => [
+        TelegramEventListener::class
+    ]
+];
+```
+
 - job 설정 .env
 ```env
 QUEUE_CONNECTION=database
