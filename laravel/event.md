@@ -81,7 +81,7 @@ php artisan make:event TelegramEventJob
 ```
 
 ```php
-class TelegramJob implements ShouldQueue
+class TelegramEventJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
