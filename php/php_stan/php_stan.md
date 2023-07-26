@@ -4,7 +4,7 @@
 composer require nunomaduro/larastan:^2.0 --dev
 ```
 
-- 프로젝트 내 phpstan.neon.dis 파일 생성 및 작성
+- 프로젝트 내 phpstan.neon.dist 파일 생성 및 작성
 ```code
 includes:
     - ./vendor/nunomaduro/larastan/extension.neon
