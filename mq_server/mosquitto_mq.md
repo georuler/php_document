@@ -14,7 +14,7 @@ sudo /etc/init.d/mosquitto status
 sudo apt-get install mosquitto-clients
 ```
 
-## test
+## test run
 
 - subscribe
 ```ssh
