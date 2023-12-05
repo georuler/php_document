@@ -1,0 +1,48 @@
+version: "3.7"
+services:
+
+#Laravel App
+  app:
+    build:
+      args:
+        user: georuler #로컬개발환경에서 echo $USER
+        uid: 1000 #로컬개발환경에서 echo $UID
+      context: ./
+      dockerfile: app.Dockerfile # 도커파일을 참조한다
+    image: laravel-app
+    restart: unless-stopped
+    working_dir: /var/www/ #워킹디렉토리 설정
+    volumes:
+      - ./:/var/www #볼륨마운트 설정
+      #- ./application:/var/www/application
+    networks:
+      - mynetwork
+
+ #Nginx Service
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - 8000:80 #80포트는 valet사용중임으로 8000:80 포트바인딩 해줌
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d:/etc/nginx/conf.d/
+    networks:
+      - mynetwork
+  #Mysl Service
+  db:
+    image: mariadb:latest
+    restart: unless-stopped
+    ports:
+      - 3307:3306 #로컬에서 3306 사용중이기 떄문에 포트바인딩해줌
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
