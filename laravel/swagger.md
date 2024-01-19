@@ -146,6 +146,35 @@ return [
  *      @OA\Property(property="message", type="string", example="method call message"),
  * )
  * 
+ * 
+ * @OA\Examples(
+ *     example="RequestExample",
+ *     summary="An example request",
+ *     value={
+ *         "json": {
+ *             "structure": "with stuff"
+ *         }
+ *     }
+ * )
+ * 
+ * 페이징 스키마
+ * @OA\Schema(
+ *      schema="pageResponseSchema",
+ *      @OA\Property(type="integer", property="current_page"),
+ *      @OA\Property(type="array",
+ *          property="data",
+ *          @OA\Items(
+ *              type="object",
+ *              ref="#/components/schemas/userSchema" 
+ *          )
+ *      ),
+ *      @OA\Property(type="integer", property="per_page"),
+ *      @OA\Property(type="integer", property="total"),
+ * )
+ * 
+ * 
+ * 
+ * 
  */
 class UserController extends Controller
 {
@@ -195,6 +224,14 @@ class UserController extends Controller
      *              )
      *          ),
      *      )
+     * 
+     *      @OA\Response(
+     *          response=200, description="Success",
+     *          @OA\JsonContent(
+     *              ref="#/components/schemas/pageResponseSchema",
+     *          ),
+     *      )
+     * 
      * )
      */
     public function index(Request $request) : void
